@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Parking Space Detector</title>
+    <style>
+        header {
+            text-align: center;
+            padding: 10px;
+            background-color: #24b28d;
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 1.2em; /* Set the initial font size for small screens */
+        }
+
+        @media (max-width: 479px) {
+            h1 {
+                font-size: 1.2em; /* Adjust font size for small screens */
+            }
+
+            #latestLiveVideo {
+            top:200px;
+        }
+        }
+
+        @media (min-width: 480px) and (max-width: 767px) {
+            h1 {
+                font-size: 1.5em; /* Adjust font size for small tablets and larger screens */
+            }
+
+            #latestLiveVideo {
+            top:150px;
+        }
+        }
+
+        @media (min-width: 768px) and (max-width: 991px) {
+            h1 {
+                font-size: 2em; /* Adjust font size for medium-sized screens */
+            }
+
+            #latestLiveVideo {
+            top:100px;
+        }
+
+        }
+
+        @media (min-width: 992px) and (max-width: 1199px) {
+            h1 {
+                font-size: 2.5em; /* Adjust font size for larger screens, like laptops */
+            }
+
+        }
+
+        @media (min-width: 1200px) {
+            h1 {
+                font-size: 3em; /* Adjust font size for extra-large screens, like desktops */
+            }
+        }
+
+        #latestLiveVideo {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        #latestLiveVideo iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        body{
+            background-color: #688daa;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Car Parking Space Detector</h1>
+</header>
+
+<div id="latestLiveVideo"></div>
+
+<script>
+// Replace 'YOUR_API_KEY' with your actual YouTube Data API key
+const apiKey = 'AIzaSyBVt5c796lVZhFQbd-YtMUIwP4CqSHHJE0';
+
+// Replace 'YOUR_PLAYLIST_ID' with your actual YouTube playlist ID
+const playlistId = 'UUBgoxlRoSARpLAaguhDdm_A';
+
+// URL for the YouTube Data API request
+const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=1&playlistId=${playlistId}&key=${apiKey}`;
+
+// Function to fetch data from the YouTube Data API
+async function fetchData() {
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        // Get the latest video snippet from the response
+        const latestVideoSnippet = data.items[0].snippet;
+
+        // Display the video title and embed the video player
+        document.getElementById('latestLiveVideo').innerHTML = `
+            <h2>${latestVideoSnippet.title}</h2>
+            <div>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/${latestVideoSnippet.resourceId.videoId}" frameborder="0" allowfullscreen></iframe>
+            </div>
+        `;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+// Call the fetchData function when the page loads
+fetchData();
+</script>
+
+</body>
+</html>
